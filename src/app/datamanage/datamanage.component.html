@@ -1,0 +1,268 @@
+<div class="d-flex flex-column flex-md-row justify-content-arround align-items-center mb-3">
+  <div class="col-12 col-md-6">
+    <h2 class="manage "> Lead Management |  <span class="lead">Leads</span> </h2>
+  </div>
+
+  <div class="col-12 col-md-6 d-flex justify-content-end align-items-center ">
+    <div class="">
+        <input type="checkbox" id="checkbox2" kendoCheckBox />
+        <label class="k-checkbox-label" for="checkbox2">Board View</label>
+    </div>
+
+    <div class="m-1">
+      <button kendoButton type="button" (click)="exportExcel()"  class="greenbt" >
+        <img src="assets/export.png" alt="">
+        Export To Excel</button>
+    </div>
+
+    <div>
+      <button kendoButton
+      (click)="addHandler({sender: grid})"
+      class="greenbt  text-center"
+      title="Add New Record">
+      <kendo-svgicon [icon]="plusIcon" class="text-center mb-1 me-0" > </kendo-svgicon>
+      Create
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="grid ">
+  <kendo-grid
+  #myGrid
+  [data]="gridData"
+  [height]="500"
+  [pageable]="true" 
+  [sortable]="true"
+  [groupable]="false"
+  [reorderable]="true"
+  [resizable]="true"
+  [columnMenu]="columnMenuSettings"
+  [filter]="filter"
+  (filterChange)="filterChange($event)"
+  (sortChange)="onSortChange($event)"
+  (edit)="editHandler($event)"
+  (cancel)="cancelHandler($event)"
+  (save)="saveHandler($event)"
+  (remove)="removeHandler($event)"
+  [navigable]="true"
+  (add)="addHandler($event)"
+  (cellClick)="cellClickHandler($event)"
+  (cellClose)="onCellClose($event)"
+  [pageSize]="gridSettings.state.take"
+  [skip]="gridSettings.state.skip"
+  [sort]="gridSettings.state.sort"
+  [group]="gridSettings.state.group"
+  (dataStateChange)="dataStateChange($event)">
+
+      <ng-template kendoGridToolbarTemplate class="p-0">
+        <div class="row col-12 d-flex flex-column flex-md-row justify-content-between align-items-center">
+          <div class="col-12 col-xl-6  d-flex flex-column flex-md-row justify-content-space-between align-items-center  mb-3">
+            <div>
+              <kendo-dropdownlist [style.width.px]="200" [data]="listItems" value="All Leads">
+              </kendo-dropdownlist> 
+            </div>
+            <div class="mx-md-3 m-2 ">
+              
+              <kendo-dropdownlist
+              [style.width.px]="200"
+              [data]="savedPreferences"
+              textField="name"
+              valueField="id"
+              [valuePrimitive]="false"
+              [(ngModel)]="selectedPreference"
+              (valueChange)="loadSavedState($event)"
+              [defaultItem]="{ id: null, name: 'Select Saved Preference' }">
+              <ng-template kendoDropDownListNoDataTemplate>
+                No preferences saved
+              </ng-template>
+              <ng-template kendoDropDownListItemTemplate let-dataItem>
+                <div style="display: flex; align-items: center; width: 100%;">
+                  <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                    {{ dataItem.name }}
+                  </span>
+                  <button
+                    type="button"
+                    (click)="deletePreference(dataItem, $event)"
+                    style="margin-left: auto; border: none; background: transparent; cursor: pointer;"
+                    title="Delete">
+                  <img src="assets/icons8-delete-24.png" alt="" srcset="">
+                  </button>
+                </div>
+              </ng-template>
+              </kendo-dropdownlist>
+            </div>
+              <div class="d-flex">
+                <kendo-textbox #searchBox [style.width.px]="160" placeholder="Type Search Keyword" (valueChange)="onFilter($event)"></kendo-textbox>
+                <!-- <kendo-grid-spacer></kendo-grid-spacer> -->
+                <div class="greenbt p-1 rounded-3 ms-1" (click)="onFilter(searchBox.value)">
+                <img src="assets/icons8-search-25.png" alt="Search Icon">
+               </div>
+              </div>
+          </div>
+
+          <div class="col-12 col-xl-6  d-flex flex-column flex-md-row justify-content-end justify-content-space-evenly mb-3">
+              <div class="responsive-width  mb-2 mb-md-0 rounded-5 p-1 px-2 d-flex align-items-center justify-content-between  bluebt2">
+                <button kendoButton  (click)="selectButton('non-intl')"  [ngClass]="['rounded-5', 'w-75', 'h-75', 'mx-2', selected === 'non-intl' ? 'active-btn' : 'inactive-btn']"  title="Browse" >Non-Intl.</button>
+                
+                <button kendoButton (click)="selectButton('intl')"  [ngClass]="['rounded-5', 'w-75', 'h-75', 'mx-2', selected === 'intl' ? 'active-btn' : 'inactive-btn']" 
+                title="Browse"> Intl.</button>  
+              </div>
+
+                <button  kendoButton (click)="onButtonClick()" title="Browse" class="greenbt mx-2">Clear Filters</button>
+                <button  kendoButton  title="Browse" class="greenbt mx-2 my-2 my-md-0"> Bulk Edit</button>
+                <button kendoButton (click)="saveGridSettings(grid)" title="Save Preference" class="greenbt mx-2"> Save Preference</button>
+                <button  kendoButton  fillMode="flat"  class="bbs" ><kendo-svgicon [icon]="menuIcon" ></kendo-svgicon></button>
+          </div>
+        </div>
+      </ng-template>
+      
+      <kendo-grid-checkbox-column [width]="45" [headerClass]="{ 'text-center': true }" [class]="{ 'text-center': true }" [resizable]="false"
+        [columnMenu]="false" [showSelectAll]="true">
+      </kendo-grid-checkbox-column>
+      
+    
+      <kendo-grid-column field="full_name" title="Actions" [width]="150" [sticky]="true" [columnMenu]="true" [sortable]="true" [filterable]="true">
+        <ng-template kendoGridCellTemplate let-dataItem>
+           <kendo-dropdowntree
+            kendoDropDownTreeExpandable
+            [kendoDropDownTreeHierarchyBinding]="areaData"
+            textField="text"
+            valueField="id"
+            childrenField="areas"
+            placeholder="Actions"
+            [popupSettings]="{ width: 300 }"
+            (click)="$event.stopPropagation()">
+            <!-- Value template for the button display -->
+            <div class="d-flex align-self-center ">
+            <ng-template kendoDropDownTreeValueTemplate>
+                <img src="assets/icons8-setting-24.png" alt="" class="me-2" >
+                <span>Actions</span>
+              </ng-template>
+            </div>
+          </kendo-dropdowntree>            
+        </ng-template>
+      </kendo-grid-column> 
+
+      <kendo-grid-column field="ProductID" title="Record Id" [width]="150" [columnMenu]="true" [sortable]="true" [filterable]="true">
+      </kendo-grid-column>
+
+      <kendo-grid-column field="ProductName" title="Last Name" [width]="150" [class]="{ 'text-center': true }" [resizable]="false" 
+        [columnMenu]="true" [sortable]="true" [filterable]="true">
+      </kendo-grid-column>
+
+      <kendo-grid-column field="QuantityPerUnit" title="First Name" [width]="150" [class]="{ 'text-center': true }" [resizable]="false"
+        [columnMenu]="true" [sortable]="true" [filterable]="true">
+      </kendo-grid-column>
+
+      <kendo-grid-column field="UnitPrice" title="Primary Email Address" [width]="190" [columnMenu]="true" [sortable]="true" [filterable]="true">
+      </kendo-grid-column>
+
+
+      <kendo-grid-column field="Source" title="Created Source" [width]="150" [columnMenu]="true" [sortable]="true" [filterable]="true">
+        <ng-template kendoGridFilterMenuTemplate let-column let-filter="filter">
+          <div>
+            <label>
+              <input type="checkbox" [(ngModel)]="filterMobile"> Mobile
+            </label>
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" [(ngModel)]="filterWeb"> Web
+            </label>
+          </div>
+          <button (click)="applyCustomFilter()">Apply Filter</button>
+        </ng-template>
+      </kendo-grid-column>
+
+
+      <kendo-grid-column field="SupplierID" title="Primary Phone Type" [width]="190" [columnMenu]="true" [sortable]="true" [filterable]="true">
+      </kendo-grid-column>
+
+      <kendo-grid-column field="CategoryID" title="Lead Stage" [width]="130" filter="numeric" [columnMenu]="true" [sortable]="true" [filterable]="true">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          {{ getCategoryName(dataItem.CategoryID) }}
+        </ng-template>
+        <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+          <kendo-dropdownlist
+            [defaultItem]="{
+              CategoryID: null,
+              CategoryName: 'Select'
+            }"
+            [data]="categories"
+            textField="CategoryName"
+            valueField="CategoryID"
+            [valuePrimitive]="true"
+            [formControl]="formGroup.get('CategoryID')">
+          </kendo-dropdownlist>
+        </ng-template>
+      </kendo-grid-column> 
+
+      <kendo-grid-column field="UnitsOnOrder" title="Appoitment Type" [width]="150" [columnMenu]="true" [sortable]="true" [filterable]="true">
+      </kendo-grid-column>
+
+   
+      <kendo-grid-column field="AssignedDate" title="Assigned Date" [width]="150" [columnMenu]="true" [sortable]="true" [filterable]="true">
+        <!-- Display template -->
+        <ng-template kendoGridCellTemplate let-dataItem>
+          {{ dataItem.AssignedDate | date:'MM/dd/yyyy' }}
+        </ng-template>
+        <!-- Edit template -->
+        <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+          <kendo-datepicker
+            [formControl]="formGroup.get('AssignedDate')"
+            placeholder="Choose a date..."
+            format="MM/dd/yyyy"
+          >
+          </kendo-datepicker>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-column field="ReorderLevel" title="Booking Agency" [width]="150" [columnMenu]="true" [sortable]="true" [filterable]="true">
+      </kendo-grid-column> 
+
+      <!-- ---------------------------------Added Columns---------------------------------- -->
+      <kendo-grid-column field="Sales" title="Sales Rep" [width]="150" [columnMenu]="true" [sortable]="true" [filterable]="true" >
+      </kendo-grid-column> 
+      <kendo-grid-column field="Coordinator" title="Cordinator" [width]="150" [columnMenu]="true" [sortable]="true" [filterable]="true">
+      </kendo-grid-column> 
+      
+      
+      <kendo-grid-column field="Mobile" title="Mobile Sync Status" [width]="150" [columnMenu]="true" [sortable]="true" [filterable]="true">
+      </kendo-grid-column> 
+      
+      <kendo-grid-column field="EffectiveDate" title="Effective Date" [width]="150" [columnMenu]="true" [sortable]="true" [filterable]="true">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          {{ dataItem.EffectiveDate | date:'MM/dd/yyyy' }}
+        </ng-template>
+        <!-- Edit template -->
+        <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+          <kendo-datepicker
+            [formControl]="formGroup.get('EffectiveDate')"
+            placeholder="Choose a date..."
+            format="MM/dd/yyyy">
+          </kendo-datepicker>
+        </ng-template>
+      </kendo-grid-column> 
+      <kendo-grid-column field="ValidDate" title="Valid Through" [width]="150" [columnMenu]="true" [sortable]="true" [filterable]="true">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          {{ dataItem.ValidDate | date:'MM/dd/yyyy' }}
+        </ng-template>
+        <!-- Edit template -->
+        <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+          <kendo-datepicker
+            [formControl]="formGroup.get('ValidDate')"
+            placeholder="Choose a date..."
+            format="MM/dd/yyyy">
+          </kendo-datepicker>
+        </ng-template>
+      </kendo-grid-column> 
+      <kendo-grid-column field="CheckingDate" title="Checking" [width]="150" [columnMenu]="true" [sortable]="true" [filterable]="true">
+      </kendo-grid-column> 
+
+
+
+      <kendo-grid-excel fileName="data.xlsx"></kendo-grid-excel>
+
+    </kendo-grid>
+</div>

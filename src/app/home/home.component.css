@@ -1,0 +1,74 @@
+.lead
+{
+  font-size: 0.7em;
+  font-weight: 400;
+  /* color: #333; */
+  /* margin-bottom: 20px; */
+}
+
+.manage
+{
+  color: #88bb44;
+}
+
+.greenbt
+{
+  background-color: #88bb44;
+  color: #fff;
+}
+
+.bluebt
+{
+  background-color: #002266;
+  color: #fff;
+}    
+.customer-photo {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-size: 32px 35px;
+  background-position: center center;
+  vertical-align: middle;
+  line-height: 32px;
+  box-shadow: inset 0 0 1px #999, inset 0 0 10px rgba(0, 0, 0, 0.2);
+  margin-left: 5px;
+}
+
+.customer-name {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 32px;
+  padding-left: 10px;
+}
+
+.red {
+  color: #d9534f;
+}
+
+.text-bold {
+  font-weight: 600;
+}
+
+.k-grid .k-grid-header .k-table-th  {
+background-color: #002266 !important;
+}
+
+.k-picker-solid
+{
+  background-color: #88bb44;
+  color: #fff;
+}
+
+/* Toogle button */
+.active-btn {
+  background-color: #88bb44; /* or your preferred active color */
+  color: white;
+  border: none;
+}
+
+.inactive-btn {
+  background-color: transparent;
+  color: #fff; /* match with active border color */
+  /* border: 1px solid #007BFF; */
+}

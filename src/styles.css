@@ -1,0 +1,336 @@
+/* You can add global styles to this file, and also import other style files */
+:host ::ng-deep .custom-dashboard-btn.k-toolbar-button .k-button {
+  background-color: #4caf50 !important;
+  color: white !important;
+  border: none !important;
+}
+
+.dark-mode .bluebt2
+{
+  background-color: #5e5346 !important;
+}
+
+.dark-mode .k-button-flat-base 
+{
+  color: #88bb44 !important;
+  border: #88bb44;
+}
+
+.dark-mode .bbs
+{
+  /* background-color: #e4e4e4; */
+  border: 1px solid #88bb44 !important;
+}
+.dark-mode .k-input-solid 
+{
+  border: 1px solid #333333;
+}
+
+.k-grid {
+  padding:10px;
+  border-radius: 5px !important;
+  border: 2px solid #88bb44 !important;
+  overflow: hidden !important; /* This ensures inner content doesn't overflow rounded corners */
+}
+.k-grid td {
+  border: 1px solid #dadada !important; /* Blue border for cells */
+} 
+
+.k-grid-toolbar
+{
+  padding: 0px !important;
+  border:none !important;
+}
+.k-grid-pager
+{
+  border: none;
+}
+
+.k-grid tr {
+background-color: #e4e4e4;
+}
+
+
+/* Updated the header cell and 3-dot icon colors for better visibility */
+.k-grid .k-grid-header .k-table-th {
+  background-color: #004080 !important; /* Changed to a lighter shade for better visibility */
+  color: #ffffff; /* Added white text color for contrast */
+  border: 0.8px solid #dadada !important;
+}
+
+/* Change the color of the 3-dot icon in the header to white */
+.k-grid .k-grid-header .k-table-th .k-grid-column-menu {
+  color: #fff !important; /* Set the 3-dot icon color to white */
+  padding: 4px;
+  border-radius: 2px;
+  transition: background-color 0.2s ease;
+}
+
+/* Column menu hover styles */
+.k-grid .k-grid-header .k-table-th .k-grid-column-menu:hover {
+  background-color: rgba(0, 0, 0) !important; /* Semi-transparent black background */
+  color: #fff !important;
+}
+
+/* Dark mode styles */
+.dark-mode {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.dark-mode .k-grid {
+  background-color: #000000;
+  color: #ffffff;
+  border: 2px solid #88bb44;
+}
+
+/* Alternating row colors in dark mode */
+.dark-mode .k-grid tr:nth-child(even) {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+
+}
+
+.dark-mode .k-grid tr:nth-child(odd) {
+  background-color: #1a1a1a !important;
+  color: #ffffff !important;
+}
+
+.dark-mode .k-grid tr:hover {
+  background-color: #2a2a2a !important;
+}
+
+.k-picker-solid:hover,
+.k-picker-solid.k-state-hover {
+  background-color: #88bb44 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+.dark-mode .k-picker-solid:hover,
+.dark-mode .k-picker-solid.k-state-hover {
+  background-color: #10110e !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+.dark-mode .k-grid td,
+.dark-mode .k-grid th,
+.dark-mode .k-grid-header,
+.dark-mode .k-grid-header-wrap,
+.dark-mode .k-grid-header th,
+.dark-mode .k-grid tr,
+.dark-mode .k-grid-content table,
+.dark-mode .k-grid-content td {
+  border-color: #333333 !important;
+}
+
+.dark-mode .k-grid-header {
+  background-color: #000000;
+}
+
+/* .dark-mode .k-grid td {
+  border-color: #333333;
+  background-color: #000000;
+  color: #fff;
+} */
+
+/* .dark-mode .k-grid-content {
+  background-color: #000000;
+} */
+
+.dark-mode .k-tabstrip {
+  background-color: #000000;
+}
+
+.dark-mode .k-tabstrip-items .k-item {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-color: #333333;
+}
+
+.dark-mode .k-tabstrip-items .k-item.k-active {
+  background-color: #88bb44 !important;
+  color: #fff;
+  border-bottom: 2px solid #88bb44;
+}
+.dark-mode .k-tabstrip-content {
+  background-color: #000000;
+  color: #ffffff;
+}
+.dark-mode .k-grid-toolbar {
+  background-color: #000000;
+  border-color: #333333;
+}
+.dark-mode .k-grouping-header {
+  background-color: #000000;
+  color: #ffffff;
+  border-color: #333333;
+}
+
+.dark-mode .k-picker-solid{
+  background-color: #10110e !important;
+  color: #fff;
+  border-color: #333333;
+}
+
+.dark-mode .k-pager {
+  background-color: #000000;
+  color: #ffffff;
+  border-color: #333333;
+}
+
+.dark-mode .k-table-th {
+  background-color: #88bb44;
+  color: #ffffff;
+  border-color: #333333;
+}
+
+
+.dark-mode .k-dropdown,
+.dark-mode .k-textbox {
+  background-color: #000000;
+  color: #ffffff;
+  /* border-color: #333333; */
+}
+
+.dark-mode .k-button {
+  background-color: #000000;
+  color: #ffffff;
+  border-color: #333333;
+}
+
+.dark-mode .greenbt {
+  background-color: #88bb44;
+  color: #ffffff;
+  border: none;
+}
+
+.dark-mode .bluebt {
+  background-color: #000000;
+  border: 1px solid #333333;
+}
+
+/* Dark mode button styles */
+.dark-mode-btn {
+  background-color: #000000;
+  color: #ffffff;
+  border: 1px solid #333333;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dark-mode-btn:hover {
+  background-color: #333333;
+}
+
+.dark-mode .dark-mode-btn {
+  background-color: #88bb44;
+  border-color: #88bb44;
+}
+
+.dark-mode .k-master-row .k-grid-content-sticky::before,
+.dark-mode .k-master-row.k-grid-row-sticky .k-table-td::before {
+  background-color: #000000;
+}
+
+.dark-mode .k-grid .k-grid-header .k-table-th
+{
+  background-color: #88bb44 !important;
+  color: #ffffff !important;
+}
+
+.k-grid .k-grid-header .k-table-th  {
+  background-color: #002266 !important;
+  }
+  
+  .k-picker-solid
+  {
+    background-color: #88bb44;
+    color: #fff;
+  }
+ 
+/* Light mode alternating rows */
+.k-grid tr:nth-child(odd) {
+  background-color: #ffffff !important;
+}
+
+.k-grid tr:nth-child(even) {
+  background-color: #e4e4e4 !important;
+}
+
+/* Light mode sticky columns - match alternating colors */
+.k-grid .k-grid-content-sticky tr:nth-child(odd),
+.k-grid .k-grid-header-sticky tr:nth-child(odd) {
+  background-color: #ffffff !important;
+}
+
+.k-grid .k-grid-content-sticky tr:nth-child(even),
+.k-grid .k-grid-header-sticky tr:nth-child(even) {
+  background-color: #e4e4e4 !important;
+}
+
+/* Dark mode alternating rows */
+.dark-mode .k-grid tr:nth-child(odd) {
+  background-color: #000000 !important;
+}
+
+.dark-mode .k-grid tr:nth-child(even) {
+  background-color: #1a1a1a !important;
+}
+
+/* Dark mode sticky columns - match alternating colors */
+.dark-mode .k-grid .k-grid-content-sticky tr:nth-child(odd),
+.dark-mode .k-grid .k-grid-header-sticky tr:nth-child(odd) {
+  background-color: #000000 !important;
+}
+
+.dark-mode .k-grid .k-grid-content-sticky tr:nth-child(even),
+.dark-mode .k-grid .k-grid-header-sticky tr:nth-child(even) {
+  background-color: #1a1a1a !important;
+}
+
+/* Hover states */
+.k-grid tr:hover {
+  background-color: #d1d1d1 !important;
+}
+
+.dark-mode .k-grid tr:hover {
+  background-color: #2a2a2a !important;
+}
+
+
+
+/* //Sticky cols bg  */
+/* .k-master-row .k-grid-content-sticky::before
+{
+  background-color: #002266;
+} */
+
+/* Sticky columns background for light mode */
+.k-master-row:nth-child(odd) .k-grid-content-sticky::before {
+  background-color: #ffffff !important;
+}
+
+.k-master-row:nth-child(even) .k-grid-content-sticky::before {
+  background-color: #e4e4e4 !important;
+}
+
+/* Sticky columns background for dark mode */
+.dark-mode .k-master-row:nth-child(odd) .k-grid-content-sticky::before {
+  background-color: #000000 !important;
+}
+
+.dark-mode .k-master-row:nth-child(even) .k-grid-content-sticky::before {
+  background-color: #1a1a1a !important;
+}
+
+/* Hover state for sticky columns */
+.k-master-row:hover .k-grid-content-sticky::before {
+  background-color: #d1d1d1 !important;
+}
+
+.dark-mode .k-master-row:hover .k-grid-content-sticky::before {
+  background-color: #2a2a2a !important;
+}

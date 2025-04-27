@@ -1,0 +1,125 @@
+<div class="nav-right my-2">
+  <button class="dark-mode btn btn-outline-secondary " (click)="toggleDarkMode()">
+    <i class="bi bi-moon-fill fw-normal" *ngIf="!isDarkMode"><span class="m-1  d-none d-md-inline">Dark Mode </span></i>
+    <i class="bi bi-sun-fill fw-normal" *ngIf="isDarkMode"><span class="m-1 d-none d-md-inline">Light Mode</span></i>
+  </button>
+
+ <button class="dark-mode btn btn-outline-secondary">
+   <a href="#"><i class="bi bi-envelope text-white"></i></a>
+  </button>
+
+  <button class="dark-mode btn btn-outline-secondary">
+    <a href="#"><i class="bi bi-gear text-white"></i></a>
+  </button>
+
+  <button class="dark-mode btn btn-outline-secondary">
+    <a class="bell-notification" href="#"><i class="bi bi-bell text-white"></i></a>
+  </button>
+
+  <button class="dark-mode btn btn-outline-secondary">
+    <a href="#"> <i class="bi bi-envelope-paper text-white"></i></a>
+  </button>
+    
+  <button class="user-info d-flex align-items-center">
+    <a href="#" class="me-2"> 
+      <i class="bi bi-person-circle text-white fs-5"></i>
+    </a> 
+    <span class="text-white">Admin</span>
+  </button>
+
+</div>
+
+<div class="navbar ">  
+  <div class="container-fluid  d-flex justify-content-between align-items-center mb-2">
+    <kendo-tabstrip class="my-tabstrip mx-2">
+
+      <kendo-tabstrip-tab>
+        <ng-template kendoTabTitle>
+          <img src="assets/icons8-dashboard-25 (1).png" alt="Dashboard Logo" class="dashboard-logo" />
+          DASHBOARD
+        </ng-template>
+
+        <ng-template kendoTabContent>
+          <p class="tab-content">Tab 1 Content</p>
+        </ng-template>
+      </kendo-tabstrip-tab>
+      
+      <kendo-tabstrip-tab >
+        <ng-template kendoTabTitle>
+          <img src="assets/icons8-agent-25.png" alt="Dashboard Logo" class="dashboard-logo" />
+          AGENT MANAGEMENT
+         </ng-template>
+        <ng-template kendoTabContent>
+          <p>Tab 2 Content</p>
+        </ng-template>
+      </kendo-tabstrip-tab>
+      
+      <kendo-tabstrip-tab >
+        <ng-template kendoTabTitle>
+          <img src="assets/icons8-calender-25.png" alt="Dashboard Logo" class="dashboard-logo" />
+          CALENDER
+        </ng-template>
+        <ng-template kendoTabContent>
+          <div class="activities-tab">
+            <!-- <img src="assets/calendar-logo.png" alt="Calendar Logo" class="calendar-logo" /> -->
+            <kendo-calendar></kendo-calendar>
+          </div>
+        </ng-template>
+      </kendo-tabstrip-tab>
+      
+      <kendo-tabstrip-tab >
+        <ng-template kendoTabTitle>
+          <img src="assets/icons8-edit-25.png" alt="Dashboard Logo" class="dashboard-logo" />
+          EZ-QUOTE
+        </ng-template>
+
+        <ng-template kendoTabContent>
+          <app-home></app-home>
+        </ng-template>
+      </kendo-tabstrip-tab>
+    
+      <kendo-tabstrip-tab  [selected]="true">
+        <ng-template kendoTabTitle>
+          <img src="assets/team (2).png" alt="Lead Logo" class="lead-logo" />
+          LEAD MANAGEMENT
+        </ng-template>
+        <ng-template kendoTabContent>
+          <app-datamanage></app-datamanage>
+
+        </ng-template>
+      </kendo-tabstrip-tab>
+
+      <kendo-tabstrip-tab >
+        <ng-template kendoTabTitle>
+          <img src="assets\icons8-top-menu-25.png" alt="Lead Logo" class="lead-logo" />
+          ACTIVITIES
+        </ng-template>
+
+        <ng-template kendoTabContent>
+          <p>Tab 4 Content</p>
+        </ng-template>
+      </kendo-tabstrip-tab>
+
+      <kendo-tabstrip-tab>
+        <ng-template kendoTabTitle>
+          <img src="assets/icons8-flow-chart-25.png" alt="Lead Logo" class="lead-logo" />
+          WORKFLOWS
+        </ng-template>
+        <ng-template kendoTabContent>
+          <p>Tab 6 Content</p>
+        </ng-template>
+        
+      </kendo-tabstrip-tab>
+      <kendo-tabstrip-tab>
+        <ng-template kendoTabTitle>
+          <img src="assets/icons8-chat-25.png" alt="Lead Logo" class="lead-logo" />
+          CHATS
+        </ng-template>
+        
+        <ng-template kendoTabContent>
+          <p>Tab 7 Content</p>
+        </ng-template>
+      </kendo-tabstrip-tab>
+    </kendo-tabstrip>
+  </div>
+</div>

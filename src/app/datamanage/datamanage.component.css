@@ -1,0 +1,90 @@
+.lead
+{
+  font-size: 0.7em;
+  font-weight: 400;
+}
+
+.manage
+{
+  color: #88bb44;
+}
+
+.greenbt
+{
+  background-color: #88bb44;
+  color: #fff;
+}
+
+.bluebt
+{
+  background-color: #002266;
+  color: #fff;
+}    
+.bluebt2
+{
+  background-color: #002266;
+  color: #fff;
+}    
+.customer-photo {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-size: 32px 35px;
+  background-position: center center;
+  vertical-align: middle;
+  line-height: 32px;
+  box-shadow: inset 0 0 1px #999, inset 0 0 10px rgba(0, 0, 0, 0.2);
+  margin-left: 5px;
+}
+
+.customer-name {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 32px;
+  padding-left: 10px;
+}
+
+.red {
+  color: #d9534f;
+}
+
+.text-bold {
+  font-weight: 600;
+}
+
+/* Toogle button */
+.active-btn {
+  background-color: #88bb44; /* or your preferred active color */
+  color: white;
+  border: none;
+}
+
+.inactive-btn {
+  background-color: transparent;
+  border: none;
+  color: #fff; /* match with active border color */
+  /* border: 1px solid #007BFF; */
+}
+
+.k-button.greenbt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.k-button.greenbt .k-icon {
+  margin-right: 4px;
+}
+
+/* // toggle Button Responsive */
+.responsive-width {
+  width: 100%;
+}
+
+
+@media (min-width: 768px) {
+  .responsive-width {
+    width: 25% !important;
+  }
+}

@@ -1,0 +1,121 @@
+/* /Navbar */
+.bi {
+  font-style: normal !important;
+}
+
+nav {
+  background-color: white;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-left {
+  display: flex;
+  justify-content: start;
+  margin-top: 20px;
+  gap: 5px;
+  font-size: 20rem;
+}
+ 
+.nav-right {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  margin-top: 40px;
+  gap: 5px;
+  margin: 2px;
+}
+
+/* Perosn */
+.user-info {
+  background-color: #002c77;
+  border-radius: 4px;
+  padding: 4px;
+  border: none;
+}
+
+.user-info .bi {
+  font-size: 1.25rem;
+}
+
+.dark-mode {
+  background-color: #002c77;
+}
+.nav-left a,
+.nav-left .dropdown-toggle {
+  background-color: #002c77;
+  color: white !important;
+  padding: 8px 15px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+.nav-left a.active,
+.nav-left .dropdown-toggle.active,
+.nav-left .dropdown-item.active {
+  background-color: #a4d65e !important;
+  color: white !important;
+}
+ 
+.nav-left a:hover,
+.nav-left .dropdown-toggle:hover {
+  background-color: #0040b3;
+  text-decoration: none;
+}
+
+kendo-tabstrip p {
+    margin: 0;
+    padding: 8px;
+  }
+  
+/* Make tabs rounded from the top only */
+::ng-deep .my-tabstrip .k-tabstrip-items .k-item {
+  color: #fff;
+  background-color: #002266; /* Default background color for all tabs */
+  /* border: 2px solid white; Default border for tabs */
+  border-top-left-radius: 5px; /* Rounded corners at the top */
+  border-top-right-radius: 5px; /* Rounded corners at the top */
+  border-bottom-left-radius: 0; /* No rounding at the bottom */
+  border-bottom-right-radius: 0; /* No rounding at the bottom */
+  margin: 5px 5px 0 0;
+}
+
+/* Style the active tab with a different background color */
+::ng-deep .my-tabstrip .k-tabstrip-items-wrapper .k-item.k-active {
+  background-color:  #88bb44; 
+  /* border: 3px solid #88bb44; Border for the active tab */
+  border-top-left-radius:5px; /* Rounded corners at the top */
+  border-top-right-radius: 5px; /* Rounded corners at the top */
+}
+
+/* Add a border below all tabs */
+::ng-deep .my-tabstrip .k-tabstrip-items {
+  border-bottom: 5px solid #88bb44; /* Border below all tabs */
+}
+
+/* Ensure the TabStrip takes the full width of the device */
+::ng-deep .my-tabstrip {
+  width: 100%; /* Make the TabStrip container take full width */
+}
+
+/* Ensure the TabStrip content takes the full width */
+::ng-deep .my-tabstrip .k-content {
+  width: 100%; /* Make the content area take full width */
+  box-sizing: border-box; /* Ensure padding and borders are included in the width */
+}
+
+/* Style the tab content */
+.tab-content {
+  padding: 15px;
+  font-size: 16px;
+
+}
+
+
