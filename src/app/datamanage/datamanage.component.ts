@@ -587,21 +587,21 @@ public getCategoryName(categoryId: number): string {
     this.persistingService.deletePreference(item.id);
   }
 
-  // Filter--------->
-  public filter: CompositeFilterDescriptor = {
-    logic: "or",
-    filters: [],
-  };
+  // Filter --------->
+
+  // public filter: CompositeFilterDescriptor = {
+  //   logic: "or",
+  //   filters: [],
+  // };
 
   filterMobile: boolean = false;
   filterWeb: boolean = false;
-
-  public filterChange(filter: CompositeFilterDescriptor): void {
-    this.filter = filter;
-    console.log('Filter changed:', filter);
-    this.loadProducts();
-  }
-
+  
+  // public filterChange(filter: CompositeFilterDescriptor): void {
+  //   this.filter = filter;
+  //   console.log('Filter changed:', filter);
+  //   this.loadProducts();
+  // }
   applyCustomFilter(): void {
     const filterConditions = [];
 
@@ -614,7 +614,7 @@ public getCategoryName(categoryId: number): string {
     }
 
     const newFilter: CompositeFilterDescriptor = {
-      logic: 'or', // ✅ Mobile OR Web (not 'and')
+      logic: 'or', 
       filters: filterConditions
     };
 
@@ -624,33 +624,78 @@ public getCategoryName(categoryId: number): string {
     this.filterChange(newFilter);
   }
   
+  // onCheckboxChange(column: any, filterService: any) {
+  //   const filters = [];
   
-  onCheckboxChange(column: any, filterService: any) {
-    const filters = [];
+  //   if (this.filterMobile) {
+  //     filters.push({
+  //       field: column.field,
+  //       operator: 'eq',
+  //       value: 'Mobile'
+  //     });
+  //   }
   
-    if (this.filterMobile) {
-      filters.push({
-        field: column.field,
-        operator: 'eq',
-        value: 'Mobile'
-      });
-    }
+  //   if (this.filterWeb) {
+  //     filters.push({
+  //       field: column.field,
+  //       operator: 'eq',
+  //       value: 'Web'
+  //     });
+  //   }
   
-    if (this.filterWeb) {
-      filters.push({
-        field: column.field,
-        operator: 'eq',
-        value: 'Web'
-      });
-    }
-  
-    // Apply combined filter
-    filterService.filter({
-      logic: 'or', // or 'and' depending on your need
-      filters: filters
-    });
+  //   // Apply combined filter
+  //   filterService.filter({
+  //     logic: 'or', // or 'and' depending on your need
+  //     filters: filters
+  //   });
+  // }
+ 
+
+
+  public allOptions: string[] = ['Mobile', 'Web'];
+public filteredOptions: string[] = [...this.allOptions];
+public selectedOptions: string[] = [];
+
+public filter: CompositeFilterDescriptor = {
+  logic: 'or',
+  filters: [],
+};
+
+public filterChange(filter: CompositeFilterDescriptor): void {
+  this.filter = filter;
+  console.log('Filter changed:', filter);
+  this.loadProducts();
+}
+
+// Called when typing in the search box
+onSearchChange(searchText: string): void {
+  this.filteredOptions = this.allOptions.filter(option => 
+    option.toLowerCase().includes(searchText.toLowerCase())
+  );
+}
+// Called when checking/unchecking checkboxes
+onCheckboxChange(event: any, column: any, filterService: any): void {
+  const value = event.target.value;
+  const isChecked = event.target.checked;
+
+  if (isChecked) {
+    this.selectedOptions.push(value);
+  } else {
+    this.selectedOptions = this.selectedOptions.filter(v => v !== value);
   }
-  
+
+  // Now apply the filters
+  const filters = this.selectedOptions.map(opt => ({
+    field: column.field,
+    operator: 'eq',
+    value: opt
+  }));
+
+  filterService.filter({
+    logic: 'or',
+    filters: filters
+  });
+}
 }
 
 const createFormGroup = (dataItem: Partial<Product>) =>

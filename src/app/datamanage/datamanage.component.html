@@ -121,7 +121,6 @@
         [columnMenu]="false" [showSelectAll]="true">
       </kendo-grid-checkbox-column>
       
-    
       <kendo-grid-column field="full_name" title="Actions" [width]="150" [sticky]="true" [columnMenu]="true" [sortable]="true" [filterable]="true">
         <ng-template kendoGridCellTemplate let-dataItem>
            <kendo-dropdowntree
@@ -160,13 +159,22 @@
       <kendo-grid-column field="Source" title="Created Source" [width]="150" [columnMenu]="true" [sortable]="true" [filterable]="true">
         <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
           <div>
-            <label>
-              <input type="checkbox" [(ngModel)]="filterMobile" (change)="onCheckboxChange(column, filterService)"> Mobile
-            </label>
+            <kendo-textbox 
+              #searchBox 
+              [style.width.px]="160" 
+              placeholder="Type Search Keyword" 
+              (valueChange)="onSearchChange($event)">
+            </kendo-textbox>
           </div>
-          <div>
+        
+          <div *ngFor="let option of filteredOptions">
             <label>
-              <input type="checkbox" [(ngModel)]="filterWeb" (change)="onCheckboxChange(column, filterService)"> Web
+              <input 
+                type="checkbox" 
+                [value]="option" 
+                [checked]="selectedOptions.includes(option)"
+                (change)="onCheckboxChange($event, column, filterService)">
+              {{ option }}
             </label>
           </div>
         </ng-template>
@@ -262,4 +270,25 @@
       <kendo-grid-excel fileName="data.xlsx"></kendo-grid-excel>
 
     </kendo-grid>
+</div>
+
+<!-- app.component.html -->
+<div class="container mt-5">
+  <div ngbDropdown class="d-inline-block">
+    <button class="btn btn-primary" id="dropdownBasic1" ngbDropdownToggle>Dropdown</button>
+    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+      <div class="row">
+        <div class="col-6">
+          <a class="dropdown-item" href="#">Item 1</a>
+          <a class="dropdown-item" href="#">Item 2</a>
+          <a class="dropdown-item" href="#">Item 3</a>
+        </div>
+        <div class="col-6">
+          <a class="dropdown-item" href="#">Item A</a>
+          <a class="dropdown-item" href="#">Item B</a>
+          <a class="dropdown-item" href="#">Item C</a>
+        </div>
+      </div>
+    </div>
+  </div>  
 </div>
