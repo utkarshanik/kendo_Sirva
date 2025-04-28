@@ -45,7 +45,6 @@ export class DatamanageComponent implements OnInit {
  public areaData = areaData;
  public gridData: Product[] = [];
  public mySelection: string[] = [];
- public pdfSVG: SVGIcon = filePdfIcon;
  public excelSVG: SVGIcon = fileExcelIcon;
  public gridData2: Product[] = [];
  public categories: Category[] = categories;
@@ -72,12 +71,11 @@ public ngOnInit(): void {
   this.loadPreferences();
 }
 
+//fetching data from the service
 private loadProducts(): void {
   this.service.products().subscribe((data) => {
-    // this.gridData = data;
     this.gridData = process(data, { filter: this.filter }).data;
     this.originalGridData = [...data]; 
-    // console.log('Loaded products:', this.gridData);
   });
 }
 // Load saved preferences from the service
@@ -86,6 +84,7 @@ private loadPreferences(): void {
   this.savedStateExists = this.savedPreferences.length > 0;
 }
 
+//Adding new row to the grid
   public addHandler(args: AddEvent | { sender: any }): void {
     const sender = args.sender || this.grid;
     this.closeEditor(sender);
@@ -113,10 +112,9 @@ private loadPreferences(): void {
 
     sender.addRow(this.formGroup);
   }
-
+// Save handler for both add and edit operations
   public saveHandler({ sender, rowIndex, formGroup, isNew, dataItem }: SaveEvent): void {
     const formValue = formGroup.value;
-  
     // Format date before saving
     if (formValue.AssignedDate instanceof Date) {
       formValue.AssignedDate = formValue.AssignedDate.toISOString();
@@ -146,7 +144,7 @@ private loadPreferences(): void {
       );
     }
   }
-
+  // Edit handler for opening the editor
   public editHandler({ sender, rowIndex, dataItem }: EditEvent): void {
     this.closeEditor(sender);
     this.formGroup = createFormGroup(dataItem);
@@ -154,11 +152,11 @@ private loadPreferences(): void {
     this.currentlyEditedRow = rowIndex;
     sender.editRow(rowIndex, this.formGroup);
   }
-
+// Remove handler for deleting a row
   public removeHandler({ dataItem }: RemoveEvent): void {
     this.service.removeProduct(dataItem).subscribe(() => this.loadProducts());
   }
-
+// Cancel handler for closing the editor without saving
   private closeEditor(grid: GridComponent, rowIndex = this.editedRowIndex): void {
     if (rowIndex !== undefined) {
       grid.closeRow(rowIndex);
@@ -167,19 +165,18 @@ private loadPreferences(): void {
     this.formGroup = undefined;
     this.currentlyEditedRow = undefined;
   }
-
+// Cancel handler for closing the editor
   public cancelHandler({ sender, rowIndex }: CancelEvent): void {
     this.closeEditor(sender, rowIndex);
   }
  
-  // Filter function for the Search bar
+// Filter function for the Search bar
   public onFilter(value: string): void {
     if (!value) {
       // Reset to original data if search is empty
       this.gridData = [...this.originalGridData];
       return;
     }
-  
     const inputValue = value.toLowerCase();
     this.gridData = this.originalGridData.filter(item => {
       return Object.keys(item).some(prop => {
@@ -187,7 +184,6 @@ private loadPreferences(): void {
         return value?.includes(inputValue);
       });
     });
-  
     // Only set skip if dataBinding exists
     if (this.dataBinding) {
       this.dataBinding.skip = 0;
@@ -201,7 +197,7 @@ handleDocumentClick(event: MouseEvent) {
     this.saveCurrentEdit();
   }
 }
-
+// Handle cell click event to open the editor
 public cellClickHandler({
   isEdited,
   dataItem,
@@ -210,19 +206,15 @@ public cellClickHandler({
   if (isEdited || (this.formGroup && !this.formGroup.valid)) {
     return;
   }
-
   // if (this.isNew) {
   //   rowIndex += 1;
   // }
-
   this.saveCurrentEdit();
-
   this.formGroup = createFormGroup(dataItem);
   this.editedRowIndex = rowIndex;
-
   this.grid.editRow(rowIndex, this.formGroup);
 }
-
+// Close the editor when clicking outside the grid
 public onCellClose(args: any): void {
   if (this.formGroup?.dirty && this.editedRowIndex !== undefined) {
     const data = this.grid.data as Product[] | null;
@@ -236,7 +228,7 @@ public onCellClose(args: any): void {
     });
   }
 }
-
+// Save the current edit when clicking outside the grid
 private saveCurrentEdit(): void {
   if (this.formGroup?.dirty && this.editedRowIndex !== undefined) {
     const data = this.grid.data as Product[] | null;
@@ -253,6 +245,7 @@ private saveCurrentEdit(): void {
     }
   }
 }
+
 // Add column menu and settings Drop down lead id
 public category(id: number): Category {
   const category = this.categories.find((x) => x.CategoryID === id);
@@ -266,6 +259,18 @@ public getCategoryName(categoryId: number): string {
   return category?.CategoryName || '';
 }
   // -----------Excel-Sort-Toogle----------------->
+ // Sort function for the dropdown
+  public dropdownSort: SortDescriptor[] = [];
+  public onSortChange(sort: SortDescriptor[]): void {
+  this.dropdownSort = sort;
+  this.gridData = process(this.gridData, { sort }).data;
+  }
+// coloumnMenu Setting for the grid
+  public columnMenuSettings: ColumnMenuSettings = {
+    filter: true,
+    columnChooser: true
+  };
+//Excel Export function
   exportExcel(): void {
     if (this.grid) {
       this.grid.saveAsExcel();
@@ -273,26 +278,15 @@ public getCategoryName(categoryId: number): string {
       console.warn("Grid reference is undefined.");
     }
   }
-
+//Clear filter 
   onButtonClick() {
     window.location.reload()
   }
-
+//Toggle between two buttons
   selected: string = 'non-intl';
   selectButton(type: string) {
     this.selected = type;
   }
-
-  public dropdownSort: SortDescriptor[] = [];
-  public onSortChange(sort: SortDescriptor[]): void {
-  this.dropdownSort = sort;
-  this.gridData = process(this.gridData, { sort }).data;
-  }
-
-  public columnMenuSettings: ColumnMenuSettings = {
-    filter: true,
-    columnChooser: true
-  };
 
   // ---------------------Save Prefrence-------------------->
   public gridSettings: GridSettings = {
@@ -448,7 +442,7 @@ public getCategoryName(categoryId: number): string {
     this.persistingService.savePreference(name, gridConfig);
     this.loadPreferences();
   }
-  
+  // Load saved state from the selected preference
   public loadSavedState(preference: SavedPreference): void {
     if (!preference) return;
   
@@ -572,8 +566,7 @@ public getCategoryName(categoryId: number): string {
     });
   };
 
-  // --------Delete Prefrences------------------->
-  
+//--------Delete Prefrences------------------->
   deletePreference(item: any, event: Event): void {
     event.stopPropagation(); // Prevent dropdown from selecting the item
     const index = this.savedPreferences.indexOf(item);
@@ -586,22 +579,10 @@ public getCategoryName(categoryId: number): string {
     }
     this.persistingService.deletePreference(item.id);
   }
-
-  // Filter --------->
-
-  // public filter: CompositeFilterDescriptor = {
-  //   logic: "or",
-  //   filters: [],
-  // };
-
+//---Custom Filter --------->
   filterMobile: boolean = false;
   filterWeb: boolean = false;
   
-  // public filterChange(filter: CompositeFilterDescriptor): void {
-  //   this.filter = filter;
-  //   console.log('Filter changed:', filter);
-  //   this.loadProducts();
-  // }
   applyCustomFilter(): void {
     const filterConditions = [];
 
@@ -622,37 +603,8 @@ public getCategoryName(categoryId: number): string {
 
     // Apply the filter
     this.filterChange(newFilter);
-  }
-  
-  // onCheckboxChange(column: any, filterService: any) {
-  //   const filters = [];
-  
-  //   if (this.filterMobile) {
-  //     filters.push({
-  //       field: column.field,
-  //       operator: 'eq',
-  //       value: 'Mobile'
-  //     });
-  //   }
-  
-  //   if (this.filterWeb) {
-  //     filters.push({
-  //       field: column.field,
-  //       operator: 'eq',
-  //       value: 'Web'
-  //     });
-  //   }
-  
-  //   // Apply combined filter
-  //   filterService.filter({
-  //     logic: 'or', // or 'and' depending on your need
-  //     filters: filters
-  //   });
-  // }
- 
-
-
-  public allOptions: string[] = ['Mobile', 'Web'];
+  } 
+public allOptions: string[] = ['Mobile', 'Web'];
 public filteredOptions: string[] = [...this.allOptions];
 public selectedOptions: string[] = [];
 
@@ -696,6 +648,35 @@ onCheckboxChange(event: any, column: any, filterService: any): void {
     filters: filters
   });
 }
+  // public filter: CompositeFilterDescriptor = {
+  //   logic: "or",
+  //   filters: [],
+  // };
+// onCheckboxChange(column: any, filterService: any) {
+  //   const filters = [];
+  
+  //   if (this.filterMobile) {
+  //     filters.push({
+  //       field: column.field,
+  //       operator: 'eq',
+  //       value: 'Mobile'
+  //     });
+  //   }
+  
+  //   if (this.filterWeb) {
+  //     filters.push({
+  //       field: column.field,
+  //       operator: 'eq',
+  //       value: 'Web'
+  //     });
+  //   }
+  
+  //   // Apply combined filter
+  //   filterService.filter({
+  //     logic: 'or', // or 'and' depending on your need
+  //     filters: filters
+  //   });
+  // }
 }
 
 const createFormGroup = (dataItem: Partial<Product>) =>

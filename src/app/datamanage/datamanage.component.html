@@ -55,6 +55,7 @@
   [group]="gridSettings.state.group"
   (dataStateChange)="dataStateChange($event)">
 
+  <!--Grid ToolBar Template -->
       <ng-template kendoGridToolbarTemplate class="p-0">
         <div class="row col-12 d-flex flex-column flex-md-row justify-content-between align-items-center">
           <div class="col-12 col-xl-6  d-flex flex-column flex-md-row justify-content-space-between align-items-center  mb-3">
@@ -120,7 +121,8 @@
       <kendo-grid-checkbox-column [width]="45" [headerClass]="{ 'text-center': true }" [class]="{ 'text-center': true }" [resizable]="false"
         [columnMenu]="false" [showSelectAll]="true">
       </kendo-grid-checkbox-column>
-      
+  
+  <!-- ---Columns--- -->
       <kendo-grid-column field="full_name" title="Actions" [width]="150" [sticky]="true" [columnMenu]="true" [sortable]="true" [filterable]="true">
         <ng-template kendoGridCellTemplate let-dataItem>
            <kendo-dropdowntree
@@ -264,8 +266,6 @@
       </kendo-grid-column> 
       <kendo-grid-column field="CheckingDate" title="Checking" [width]="150" [columnMenu]="true" [sortable]="true" [filterable]="true">
       </kendo-grid-column> 
-
-
 
       <kendo-grid-excel fileName="data.xlsx"></kendo-grid-excel>
 
