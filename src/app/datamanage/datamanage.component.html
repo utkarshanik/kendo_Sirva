@@ -133,7 +133,6 @@
             placeholder="Actions"
             [popupSettings]="{ width: 300 }"
             (click)="$event.stopPropagation()">
-            <!-- Value template for the button display -->
             <div class="d-flex align-self-center ">
             <ng-template kendoDropDownTreeValueTemplate>
                 <img src="assets/icons8-setting-24.png" alt="" class="me-2" >
@@ -158,23 +157,21 @@
       <kendo-grid-column field="UnitPrice" title="Primary Email Address" [width]="190" [columnMenu]="true" [sortable]="true" [filterable]="true">
       </kendo-grid-column>
 
-
       <kendo-grid-column field="Source" title="Created Source" [width]="150" [columnMenu]="true" [sortable]="true" [filterable]="true">
-        <ng-template kendoGridFilterMenuTemplate let-column let-filter="filter">
+        <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
           <div>
             <label>
-              <input type="checkbox" [(ngModel)]="filterMobile"> Mobile
+              <input type="checkbox" [(ngModel)]="filterMobile" (change)="onCheckboxChange(column, filterService)"> Mobile
             </label>
           </div>
           <div>
             <label>
-              <input type="checkbox" [(ngModel)]="filterWeb"> Web
+              <input type="checkbox" [(ngModel)]="filterWeb" (change)="onCheckboxChange(column, filterService)"> Web
             </label>
           </div>
-          <button (click)="applyCustomFilter()">Apply Filter</button>
         </ng-template>
       </kendo-grid-column>
-
+      
 
       <kendo-grid-column field="SupplierID" title="Primary Phone Type" [width]="190" [columnMenu]="true" [sortable]="true" [filterable]="true">
       </kendo-grid-column>

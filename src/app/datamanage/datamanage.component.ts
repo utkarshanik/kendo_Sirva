@@ -80,7 +80,6 @@ private loadProducts(): void {
     // console.log('Loaded products:', this.gridData);
   });
 }
-
 // Load saved preferences from the service
 private loadPreferences(): void {
   this.savedPreferences = this.persistingService.getAllPreferences();
@@ -173,6 +172,7 @@ private loadPreferences(): void {
     this.closeEditor(sender, rowIndex);
   }
  
+  // Filter function for the Search bar
   public onFilter(value: string): void {
     if (!value) {
       // Reset to original data if search is empty
@@ -253,8 +253,7 @@ private saveCurrentEdit(): void {
     }
   }
 }
-
-  // Add column menu and settings Drop down lead id
+// Add column menu and settings Drop down lead id
 public category(id: number): Category {
   const category = this.categories.find((x) => x.CategoryID === id);
   if (!category) {
@@ -266,7 +265,6 @@ public getCategoryName(categoryId: number): string {
   const category = this.categories.find(c => c.CategoryID === categoryId);
   return category?.CategoryName || '';
 }
-
   // -----------Excel-Sort-Toogle----------------->
   exportExcel(): void {
     if (this.grid) {
@@ -589,10 +587,7 @@ public getCategoryName(categoryId: number): string {
     this.persistingService.deletePreference(item.id);
   }
 
-
-
-
-
+  // Filter--------->
   public filter: CompositeFilterDescriptor = {
     logic: "or",
     filters: [],
@@ -628,12 +623,34 @@ public getCategoryName(categoryId: number): string {
     // Apply the filter
     this.filterChange(newFilter);
   }
-
-  // loadProducts(): void {
-  //   // Your function to reload / filter data
-  // }
-
-
+  
+  
+  onCheckboxChange(column: any, filterService: any) {
+    const filters = [];
+  
+    if (this.filterMobile) {
+      filters.push({
+        field: column.field,
+        operator: 'eq',
+        value: 'Mobile'
+      });
+    }
+  
+    if (this.filterWeb) {
+      filters.push({
+        field: column.field,
+        operator: 'eq',
+        value: 'Web'
+      });
+    }
+  
+    // Apply combined filter
+    filterService.filter({
+      logic: 'or', // or 'and' depending on your need
+      filters: filters
+    });
+  }
+  
 }
 
 const createFormGroup = (dataItem: Partial<Product>) =>
