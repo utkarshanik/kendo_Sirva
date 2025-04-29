@@ -7,7 +7,7 @@ import { KENDO_GRID_PDF_EXPORT, KENDO_GRID_EXCEL_EXPORT } from '@progress/kendo-
 import { process,State, SortDescriptor, CompositeFilterDescriptor, filterBy } from '@progress/kendo-data-query';
 import { filePdfIcon, fileExcelIcon, SVGIcon, plusIcon,menuIcon} from '@progress/kendo-svg-icons';
 import { KENDO_BUTTONS, KENDO_DROPDOWNBUTTON } from '@progress/kendo-angular-buttons';
-import { DropDownTreeComponent, KENDO_DROPDOWNLIST, KENDO_DROPDOWNTREE } from '@progress/kendo-angular-dropdowns';
+import { DropDownTreeComponent, KENDO_DROPDOWNLIST, KENDO_DROPDOWNTREE, KENDO_MULTICOLUMNCOMBOBOX, MultiColumnComboBoxComponent } from '@progress/kendo-angular-dropdowns';
 import { IconsModule } from '@progress/kendo-angular-icons';
 import { Product,Category } from '../products';
 import { DataservieService } from '../services/dataservie.service';
@@ -26,7 +26,7 @@ import { CustomColumnMenuComponent } from '../custom-column-menu/custom-column-m
   selector: 'app-datamanage',
   imports: [KENDO_GRID, GridModule, CommonModule, HttpClientModule,
     KENDO_CHARTS,
-    KENDO_INPUTS,
+    KENDO_INPUTS,NgbDropdownModule,MultiColumnComboBoxComponent,KENDO_MULTICOLUMNCOMBOBOX,
     KENDO_GRID_PDF_EXPORT,
     KENDO_GRID_EXCEL_EXPORT,KENDO_BUTTONS,KENDO_DROPDOWNLIST,
     IconsModule,DropDownTreeComponent,KENDO_DATEPICKER,NgbDropdownModule,
@@ -34,6 +34,7 @@ import { CustomColumnMenuComponent } from '../custom-column-menu/custom-column-m
     providers: [DataservieService],
   templateUrl: './datamanage.component.html',
   styleUrls: ['./datamanage.component.css'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],  
 })
 
 export class DatamanageComponent implements OnInit {
@@ -65,6 +66,26 @@ constructor(private service: DataservieService,public persistingService: StatePe
     this.gridSettings = this.mapGridSettings(persistedSettings);
   }
 }
+
+// NgDropdown dataa
+selectedOption: any = null;
+
+actionList = [
+  { text: 'View', value: 'view' },
+  { text: 'Edit', value: 'edit' },
+  { text: 'Delete', value: 'delete' },
+  { text: 'Archive', value: 'archive' },
+  { text: 'Download', value: 'download' },
+  { text: 'Share', value: 'share' }
+];
+
+// define two columns
+columns = [
+  { field: 'text', title: 'Action 1' },
+  { field: 'text', title: 'Action 2' }
+];
+
+
 
 public ngOnInit(): void {
   this.loadProducts();
@@ -266,10 +287,11 @@ public getCategoryName(categoryId: number): string {
   this.gridData = process(this.gridData, { sort }).data;
   }
 // coloumnMenu Setting for the grid
-  public columnMenuSettings: ColumnMenuSettings = {
-    filter: true,
-    columnChooser: true
-  };
+  // public columnMenuSettings: ColumnMenuSettings = {
+  //   filter: true,
+  //   columnChooser: true
+  // };
+
 //Excel Export function
   exportExcel(): void {
     if (this.grid) {

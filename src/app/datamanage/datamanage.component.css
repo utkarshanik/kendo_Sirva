@@ -82,6 +82,38 @@
   width: 100%;
 }
 
+/* Dropdownn  */
+/* Styling the dropdown to have two columns */
+.dropdown-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px; /* Adjust space between columns */
+}
+
+.col1, .col2 {
+  display: flex;
+  flex-direction: column; /* Stack options vertically */
+}
+
+.col1 div, .col2 div {
+  padding: 5px;
+}
+
+/* Adjust column styling if needed */
+.col1 {
+  width: 48%; /* First column width */
+}
+
+.col2 {
+  width: 48%; /* Second column width */
+}
+
+[ngbDropdownMenu] {
+  position: absolute !important;
+  z-index: 1050; /* Bootstrap dropdowns use this range */
+}
+
+
 
 @media (min-width: 768px) {
   .responsive-width {
