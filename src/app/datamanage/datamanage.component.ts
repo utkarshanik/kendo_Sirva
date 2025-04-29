@@ -1,35 +1,32 @@
 import { Component, OnInit, ViewChild, CUSTOM_ELEMENTS_SCHEMA, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { KENDO_GRID, DataBindingDirective, GridComponent, EditEvent, AddEvent, CancelEvent, SaveEvent, RemoveEvent, GridModule, ColumnMenuSettings, CellClickEvent } from '@progress/kendo-angular-grid';
+import { KENDO_GRID, DataBindingDirective, GridComponent, EditEvent, AddEvent, CancelEvent, SaveEvent, RemoveEvent, GridModule, CellClickEvent } from '@progress/kendo-angular-grid';
 import { KENDO_CHARTS } from '@progress/kendo-angular-charts';
 import { KENDO_CHECKBOX, KENDO_INPUTS } from '@progress/kendo-angular-inputs';
 import { KENDO_GRID_PDF_EXPORT, KENDO_GRID_EXCEL_EXPORT } from '@progress/kendo-angular-grid';
 import { process,State, SortDescriptor, CompositeFilterDescriptor, filterBy } from '@progress/kendo-data-query';
-import { filePdfIcon, fileExcelIcon, SVGIcon, plusIcon,menuIcon} from '@progress/kendo-svg-icons';
+import { fileExcelIcon, SVGIcon, plusIcon,menuIcon} from '@progress/kendo-svg-icons';
 import { KENDO_BUTTONS, KENDO_DROPDOWNBUTTON } from '@progress/kendo-angular-buttons';
-import { DropDownTreeComponent, KENDO_DROPDOWNLIST, KENDO_DROPDOWNTREE, KENDO_MULTICOLUMNCOMBOBOX, MultiColumnComboBoxComponent } from '@progress/kendo-angular-dropdowns';
+import { KENDO_DROPDOWNLIST, KENDO_DROPDOWNTREE, KENDO_MULTICOLUMNCOMBOBOX} from '@progress/kendo-angular-dropdowns';
 import { IconsModule } from '@progress/kendo-angular-icons';
 import { Product,Category } from '../products';
 import { DataservieService } from '../services/dataservie.service';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule,Validators,} from "@angular/forms";
 import { HttpClientModule } from '@angular/common/http';
-import { listItems,listItems2,areaData  } from './dropdown_data';
-import{categories} from './category';
+import { listItems,categories} from './dropdown_data';
 import { GridSettings } from './gridPref/grid-settings.interface';
 import { SavedPreference, StatePersistingService } from './gridPref/service/state-persisting.service';
-import{ColumnSettings} from './gridPref/column-settings.interface';
 import { KENDO_DATEPICKER } from '@progress/kendo-angular-dateinputs';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-import { CustomColumnMenuComponent } from '../custom-column-menu/custom-column-menu.component';
 
 @Component({
   selector: 'app-datamanage',
   imports: [KENDO_GRID, GridModule, CommonModule, HttpClientModule,
     KENDO_CHARTS,
-    KENDO_INPUTS,NgbDropdownModule,MultiColumnComboBoxComponent,KENDO_MULTICOLUMNCOMBOBOX,
+    KENDO_INPUTS,NgbDropdownModule,KENDO_MULTICOLUMNCOMBOBOX,
     KENDO_GRID_PDF_EXPORT,
     KENDO_GRID_EXCEL_EXPORT,KENDO_BUTTONS,KENDO_DROPDOWNLIST,
-    IconsModule,DropDownTreeComponent,KENDO_DATEPICKER,NgbDropdownModule,
+    IconsModule,KENDO_DATEPICKER,NgbDropdownModule,
     KENDO_DROPDOWNTREE,KENDO_CHECKBOX,ReactiveFormsModule,FormsModule],
     providers: [DataservieService],
   templateUrl: './datamanage.component.html',
@@ -42,8 +39,6 @@ export class DatamanageComponent implements OnInit {
   @ViewChild('myGrid') grid!: GridComponent;
 
  public listItems = listItems;
- public listItems2 = listItems2;
- public areaData = areaData;
  public gridData: Product[] = [];
  public mySelection: string[] = [];
  public excelSVG: SVGIcon = fileExcelIcon;
@@ -66,26 +61,6 @@ constructor(private service: DataservieService,public persistingService: StatePe
     this.gridSettings = this.mapGridSettings(persistedSettings);
   }
 }
-
-// NgDropdown dataa
-selectedOption: any = null;
-
-actionList = [
-  { text: 'View', value: 'view' },
-  { text: 'Edit', value: 'edit' },
-  { text: 'Delete', value: 'delete' },
-  { text: 'Archive', value: 'archive' },
-  { text: 'Download', value: 'download' },
-  { text: 'Share', value: 'share' }
-];
-
-// define two columns
-columns = [
-  { field: 'text', title: 'Action 1' },
-  { field: 'text', title: 'Action 2' }
-];
-
-
 
 public ngOnInit(): void {
   this.loadProducts();
@@ -267,7 +242,7 @@ private saveCurrentEdit(): void {
   }
 }
 
-// Add column menu and settings Drop down lead id
+// Add column menu and settings Drop down lead stage
 public category(id: number): Category {
   const category = this.categories.find((x) => x.CategoryID === id);
   if (!category) {

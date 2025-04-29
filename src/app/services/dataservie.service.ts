@@ -8,7 +8,7 @@ import { Product } from '../products';
   providedIn: 'root',
 })
 export class DataservieService {
-  private baseUrl = 'http://localhost:5000/products'; // JSON Server URL
+  private baseUrl = 'http://localhost:3000/products'; // JSON Server URL
 
   constructor(private http: HttpClient) {}
 
