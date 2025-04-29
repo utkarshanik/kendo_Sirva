@@ -84,36 +84,23 @@
 
 /* Dropdownn  */
 /* Styling the dropdown to have two columns */
-.dropdown-grid {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px; /* Adjust space between columns */
-}
 
-.col1, .col2 {
-  display: flex;
-  flex-direction: column; /* Stack options vertically */
-}
-
-.col1 div, .col2 div {
-  padding: 5px;
-}
-
-/* Adjust column styling if needed */
-.col1 {
-  width: 48%; /* First column width */
-}
-
-.col2 {
-  width: 48%; /* Second column width */
-}
-
-[ngbDropdownMenu] {
+/* Ensure dropdown pops above grid rows */
+.dropdown-menu.show {
   position: absolute !important;
-  z-index: 1050; /* Bootstrap dropdowns use this range */
+  z-index: 1050 !important;
+  min-width: 500px;
 }
 
+/* Allow overflow from grid cells */
+.k-grid td {
+  overflow: visible !important;
+  position: relative; /* Needed to anchor absolute dropdown inside cell */
+}
 
+.k-grid .k-grid-content {
+  overflow: visible !important;
+}
 
 @media (min-width: 768px) {
   .responsive-width {

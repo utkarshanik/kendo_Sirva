@@ -21,6 +21,7 @@
   /* background-color: #e4e4e4; */
   border: 1px solid #88bb44 !important;
 }
+
 .dark-mode .k-input-solid 
 {
   border: 1px solid #333333;
@@ -126,16 +127,6 @@ background-color: #e4e4e4;
 .dark-mode .k-grid-header {
   background-color: #000000;
 }
-
-/* .dark-mode .k-grid td {
-  border-color: #333333;
-  background-color: #000000;
-  color: #fff;
-} */
-
-/* .dark-mode .k-grid-content {
-  background-color: #000000;
-} */
 
 .dark-mode .k-tabstrip {
   background-color: #000000;
@@ -299,14 +290,6 @@ background-color: #e4e4e4;
   background-color: #2a2a2a !important;
 }
 
-
-
-/* //Sticky cols bg  */
-/* .k-master-row .k-grid-content-sticky::before
-{
-  background-color: #002266;
-} */
-
 /* Sticky columns background for light mode */
 .k-master-row:nth-child(odd) .k-grid-content-sticky::before {
   background-color: #ffffff !important;
@@ -333,3 +316,18 @@ background-color: #e4e4e4;
 .dark-mode .k-master-row:hover .k-grid-content-sticky::before {
   background-color: #2a2a2a !important;
 }
+
+
+
+
+  /* Allow overflow from grid cells */
+.k-grid td {
+  overflow: visible !important;
+  position: relative; /* Needed to anchor absolute dropdown inside cell */
+}
+
+/* Only raise the dropdown cell when it's active */
+.k-grid td:has(.dropdown-menu.show) {
+  z-index: 9999 !important;
+}
+
