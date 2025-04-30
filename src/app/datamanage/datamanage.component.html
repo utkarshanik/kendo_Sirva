@@ -40,15 +40,12 @@
   [navigable]="true"
   [filter]="filter"
   [columnMenu]="{ filter: true, columnChooser: true }"
-  (edit)="editHandler($event)"
-  (cancel)="cancelHandler($event)"
   (save)="saveHandler($event)"
-  (remove)="removeHandler($event)"
   (add)="addHandler($event)"
+  (remove)="removeHandler($event)"
   (cellClick)="cellClickHandler($event)"
-  (cellClose)="onCellClose($event)"
-  (filterChange)="filterChange($event)"
   (sortChange)="onSortChange($event)"
+  (filterChange)="filterChange($event)"
   [pageSize]="gridSettings.state.take"
   [skip]="gridSettings.state.skip"
   [sort]="gridSettings.state.sort"
@@ -117,7 +114,6 @@
           </div>
         </div>
       </ng-template>
-      
       
       <kendo-grid-checkbox-column [width]="45" [headerClass]="{ 'text-center': true }" [class]="{ 'text-center': true }" [resizable]="false"
         [columnMenu]="false" [showSelectAll]="true">
@@ -190,7 +186,6 @@
           </div>
         </ng-template>
       </kendo-grid-column>
-      
 
       <kendo-grid-column field="SupplierID" title="Primary Phone Type" [width]="190" [columnMenu]="true" [sortable]="true" [filterable]="true">
       </kendo-grid-column>
@@ -217,7 +212,6 @@
       <kendo-grid-column field="UnitsOnOrder" title="Appoitment Type" [width]="150" [columnMenu]="true" [sortable]="true" [filterable]="true">
       </kendo-grid-column>
 
-   
       <kendo-grid-column field="AssignedDate" title="Assigned Date" [width]="150" [columnMenu]="true" [sortable]="true" [filterable]="true">
         <!-- Display template -->
         <ng-template kendoGridCellTemplate let-dataItem>
@@ -240,9 +234,9 @@
       <!-- ---------------------------------Added Columns---------------------------------- -->
       <kendo-grid-column field="Sales" title="Sales Rep" [width]="150" [columnMenu]="true" [sortable]="true" [filterable]="true" >
       </kendo-grid-column> 
+
       <kendo-grid-column field="Coordinator" title="Cordinator" [width]="150" [columnMenu]="true" [sortable]="true" [filterable]="true">
       </kendo-grid-column> 
-      
       
       <kendo-grid-column field="Mobile" title="Mobile Sync Status" [width]="150" [columnMenu]="true" [sortable]="true" [filterable]="true">
       </kendo-grid-column> 
@@ -260,6 +254,7 @@
           </kendo-datepicker>
         </ng-template>
       </kendo-grid-column> 
+
       <kendo-grid-column field="ValidDate" title="Valid Through" [width]="150" [columnMenu]="true" [sortable]="true" [filterable]="true">
         <ng-template kendoGridCellTemplate let-dataItem>
           {{ dataItem.ValidDate | date:'MM/dd/yyyy' }}
@@ -273,6 +268,7 @@
           </kendo-datepicker>
         </ng-template>
       </kendo-grid-column> 
+      
       <kendo-grid-column field="CheckingDate" title="Checking" [width]="150" [columnMenu]="true" [sortable]="true" [filterable]="true">
       </kendo-grid-column> 
 
