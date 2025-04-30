@@ -222,80 +222,7 @@ private saveCurrentEdit(): void {
       },
       group: [],
     }),
-    columnsConfig: [
-      {
-        field: "ProductID",
-        title: "ID",
-        filterable: true,
-        filter: "numeric",
-        width: 60,
-        hidden: false,
-      },
-      {
-        field: "ProductName",
-        title: "Product Name",
-        filterable: true,
-        filter: "text",
-        width: 300,
-        hidden: false,
-      },
-      {
-        field: "SupplierID",
-        title: "Supplier",
-        filterable: true,
-        filter: "numeric",
-        width: 200,
-        hidden: false,
-      },
-      {
-        field: "CategoryID",
-        title: "Category",
-        filterable: true,
-        filter: "numeric",
-        width: 200,
-        hidden: false,
-      },
-      {
-        field: "QuantityPerUnit",
-        title: "Quantity Per Unit",
-        filterable: true,
-        filter: "text",
-        width: 200,
-        hidden: false,
-      },
-      {
-        field: "UnitPrice",
-        title: "Units Price",
-        filterable: true,
-        filter: "text",
-        width: 180,
-        hidden: false,
-      },
-      {
-        field: "UnitsInStock",
-        title: "Units In Stock",
-        filterable: true,
-        filter: "numeric",
-        width: 180,
-        hidden: false,
-      },
-      {
-        field: "UnitsOnOrder",
-        title: "Units On Order",
-        filterable: true,
-        filter: "numeric",
-        width: 180,
-        hidden: false,
-      },
-      {
-        field: "ReorderLevel",
-        title: "Reorder Level",
-        filterable: true,
-        filter: "text",
-        width: 180,
-        hidden: false,
-      },
-    ],
+    columnsConfig:[],
   };
 
 public dataStateChange(state: State): void {
@@ -405,7 +332,7 @@ public dataStateChange(state: State): void {
   
   public mapGridSettings(gridSettings: GridSettings): GridSettings {
     const state = gridSettings.state;
-    this.mapDateFilter(state.filter);
+    // this.mapDateFilter(state.filter);
 
     return {
       state,
@@ -416,17 +343,17 @@ public dataStateChange(state: State): void {
     };
   }
 
-  private mapDateFilter = (descriptor: any) => {
-    const filters = descriptor.filters || [];
+  // private mapDateFilter = (descriptor: any) => {
+  //   const filters = descriptor.filters || [];
 
-    filters.forEach((filter: any) => {
-      if (filter.filters) {
-        this.mapDateFilter(filter);
-      } else if (filter.field === "FirstOrderedOn" && filter.value) {
-        filter.value = new Date(filter.value);
-      }
-    });
-  };
+  //   filters.forEach((filter: any) => {
+  //     if (filter.filters) {
+  //       this.mapDateFilter(filter);
+  //     } else if (filter.field === "FirstOrderedOn" && filter.value) {
+  //       filter.value = new Date(filter.value);
+  //     }
+  //   });
+  // };
 
 //--------Delete Saved Prefrences------------------->
   deletePreference(item: any, event: Event): void {
