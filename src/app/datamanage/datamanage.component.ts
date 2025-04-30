@@ -185,7 +185,6 @@ public cellClickHandler({isEdited,dataItem,rowIndex,sender}: CellClickEvent): vo
   this.editedRowIndex = rowIndex;
   sender.editRow(rowIndex, this.formGroup);
 }
-
 // Save the current edit when clicked inside / outside[With Event] grid
 private saveCurrentEdit(): void {
   if (this.formGroup?.dirty && this.editedRowIndex !== undefined) {
@@ -203,13 +202,11 @@ private saveCurrentEdit(): void {
     }
   }
 }
-  // ---------------------Save Prefrence-------------------->
+  //---------------------Save Prefrence-------------------->
   public gridSettings: GridSettings = {
     state: {
       skip: 0,
       take: 5,
-
-      // Initial filter descriptor
       filter: {
         logic: "and",
         filters: [],
@@ -219,7 +216,6 @@ private saveCurrentEdit(): void {
     gridData: process(this.gridData, {
       skip: 0, 
       take: 5,
-      // Initial filter descriptor
       filter: {
         logic: "and",
         filters: [],
@@ -302,6 +298,10 @@ private saveCurrentEdit(): void {
     ],
   };
 
+public dataStateChange(state: State): void {
+    this.gridSettings.state = state;
+    this.gridSettings.gridData = process(this.gridData, state);
+  }
   private isValidGridSettings(settings: any): settings is GridSettings {
     return settings 
       && 'state' in settings 
@@ -309,31 +309,6 @@ private saveCurrentEdit(): void {
       && Array.isArray(settings.columnsConfig);
   }
 
-  private applyGridSettings(settings: GridSettings): void {
-    if (!this.grid) return;
-  
-    // Apply sort
-    if (settings.state.sort) {
-      this.grid.sort = settings.state.sort;
-    }
-  
-    // Apply filters
-    if (settings.state.filter) {
-      this.grid.filter = settings.state.filter;
-    }
-  
-    // Apply column configurations
-    if (settings.columnsConfig) {
-      this.grid.columns.forEach(column => {
-        const savedColumn = settings.columnsConfig.find(c => c.field === (column as any).field);
-        if (savedColumn) {
-          column.width = savedColumn.width;
-          column.hidden = savedColumn.hidden;
-        }
-      });
-    }
-
-  }
   public saveGridSettings(grid: GridComponent): void {
     // Show dialog for preference name
     const name = prompt('Enter a name for this preference:');
@@ -425,34 +400,9 @@ private saveCurrentEdit(): void {
       console.warn('Invalid grid settings in preference:', preference);
     }
   }
-  private getDefaultGridSettings(): GridSettings {
-    return {
-      state: {
-        skip: 0,
-        take: 5,
-        filter: {
-          logic: "and",
-          filters: [],
-        },
-        group: [],
-      },
-      gridData: process(this.gridData, {
-        skip: 0,
-        take: 5,
-        filter: {
-          logic: "and",
-          filters: [],
-        },
-        group: [],
-      }),
-      columnsConfig: this.gridSettings.columnsConfig
-    };
-  }
+ 
   public savedStateExists: boolean = false;
-  public dataStateChange(state: State): void {
-    this.gridSettings.state = state;
-    this.gridSettings.gridData = process(this.gridData, state);
-  }
+  
   public mapGridSettings(gridSettings: GridSettings): GridSettings {
     const state = gridSettings.state;
     this.mapDateFilter(state.filter);
@@ -478,7 +428,7 @@ private saveCurrentEdit(): void {
     });
   };
 
-//--------Delete Prefrences------------------->
+//--------Delete Saved Prefrences------------------->
   deletePreference(item: any, event: Event): void {
     event.stopPropagation(); // Prevent dropdown from selecting the item
     const index = this.savedPreferences.indexOf(item);
@@ -491,7 +441,7 @@ private saveCurrentEdit(): void {
     }
     this.persistingService.deletePreference(item.id);
   }
-//---Custom Filter --------->
+//-------Adding Custom Filter ------------------>
   filterMobile: boolean = false;
   filterWeb: boolean = false;
   
@@ -561,7 +511,7 @@ onCheckboxChange(event: any, column: any, filterService: any): void {
   });
 }
 
-// Filter function for the Search bar....
+//------- Filter function for the Search bar--------------->
 public onFilter(value: string): void {
   if (!value) {
     // Reset to original data if search is empty
@@ -580,13 +530,13 @@ public onFilter(value: string): void {
     this.dataBinding.skip = 0;
   }
 }
-
-  // -----------Excel-Sort-Toogle----------------->
- // Sort function for the dropdown
+// -----------Excel-Sort-Toogle----------------->
+  // Sort function for the dropdown
   public dropdownSort: SortDescriptor[] = [];
   public onSortChange(sort: SortDescriptor[]): void {
-  this.dropdownSort = sort;
-  this.gridData = process(this.gridData, { sort }).data;
+  this.dropdownSort = sort;  //Save the sort descriptor, Reapply it later when resetting the grid state.
+  //re-processing the grid data with the new sort settings
+  this.gridData = process(this.gridData, { sort }).data; //Applies sorting as defined in sort on grid data, Sets the result (.data) back into this.gridData
   }
 // coloumnMenu Setting for the grid
   // public columnMenuSettings: ColumnMenuSettings = {

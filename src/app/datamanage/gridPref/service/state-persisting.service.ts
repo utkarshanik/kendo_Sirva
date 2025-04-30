@@ -22,8 +22,6 @@ export interface SavedPreference {
   timestamp: Date;
 }
 
-
-
 @Injectable({
   providedIn: 'root'
 })
