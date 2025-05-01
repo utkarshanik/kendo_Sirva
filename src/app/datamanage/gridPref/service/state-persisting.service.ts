@@ -28,7 +28,9 @@ export interface SavedPreference {
 export class StatePersistingService {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
   
+  // The key used to store grid preferences in local storage
   private readonly PREFERENCES_KEY = 'gridPreferences';
+  //Saving the grid state in local storage 
   public savePreference(name: string, gridConfig: GridSettings): void {
     if (isPlatformBrowser(this.platformId)) {
       const preferences = this.getAllPreferences();

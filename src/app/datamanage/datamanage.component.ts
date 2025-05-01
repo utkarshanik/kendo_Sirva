@@ -18,6 +18,8 @@ import { GridSettings } from './gridPref/grid-settings.interface';
 import { SavedPreference, StatePersistingService } from './gridPref/service/state-persisting.service';
 import { KENDO_DATEPICKER } from '@progress/kendo-angular-dateinputs';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { log } from 'node:console';
+import { identity } from 'rxjs';
 
 @Component({
   selector: 'app-datamanage',
@@ -75,6 +77,7 @@ private loadProducts(): void {
 }
 // Load saved preferences from the service
 private loadPreferences(): void {
+  //Getting all the saved preferences from the service
   this.savedPreferences = this.persistingService.getAllPreferences();
   this.savedStateExists = this.savedPreferences.length > 0;
 }
@@ -203,18 +206,20 @@ private saveCurrentEdit(): void {
   }
 }
   //---------------------Save Prefrence-------------------->
+  //gridSetting obj holds the grid behaviour and data via state, gridData and columnsConfig 
+  // we just need state,gridData and columnsConfig , skip,take, filter, group are for default state of the grid
   public gridSettings: GridSettings = {
     state: {
       skip: 0,
       take: 5,
-      filter: {
+      filter: {                        //can skip this part 
         logic: "and",
         filters: [],
       },
       group: [],
     },
     gridData: process(this.gridData, {
-      skip: 0, 
+      skip: 0,                         // default skip value
       take: 5,
       filter: {
         logic: "and",
@@ -224,9 +229,10 @@ private saveCurrentEdit(): void {
     }),
     columnsConfig:[],
   };
-
+// Save the current state of the grid when it changes...
 public dataStateChange(state: State): void {
     this.gridSettings.state = state;
+    // Update the grid data based on the new state
     this.gridSettings.gridData = process(this.gridData, state);
   }
   private isValidGridSettings(settings: any): settings is GridSettings {
@@ -235,15 +241,15 @@ public dataStateChange(state: State): void {
       && 'columnsConfig' in settings 
       && Array.isArray(settings.columnsConfig);
   }
-
-  public saveGridSettings(grid: GridComponent): void {
-    // Show dialog for preference name
+// Save the grid Prefrence to the service
+public saveGridSettings(grid: GridComponent): void {
+    console.log('Saving grid settings...',grid.columns.toArray());
     const name = prompt('Enter a name for this preference:');
     if (!name) return;
-  
     const gridConfig = {
       state: this.gridSettings.state,
       gridData: this.gridSettings.gridData,
+      // looping over each column to extract and save specific column-related settings[col_config]:
       columnsConfig: grid.columns.toArray().map(item => ({
         field: (item as any).field,
         width: (item as any).width,
@@ -253,87 +259,60 @@ public dataStateChange(state: State): void {
         filterable: (item as any).filterable,
         orderIndex: item.orderIndex,
         hidden: item.hidden,
-      }))
+      })) 
     };
   
     this.persistingService.savePreference(name, gridConfig);
     this.loadPreferences();
   }
-  // Load saved state from the selected preference
-  public loadSavedState(preference: SavedPreference): void {
-    if (!preference) return;
   
-    const settings = preference.gridConfig;
-    if (settings && this.isValidGridSettings(settings)) {
-      try {
-        // Update grid settings
-        this.gridSettings = this.mapGridSettings(settings);
-  
-        if (this.grid) {
-          // Apply state
-          if (settings.state) {
-            if (settings.state.sort) {
-              this.grid.sort = settings.state.sort;
-            }
-            if (settings.state.filter) {
-              this.grid.filter = settings.state.filter;
-            }
-            this.gridSettings.state.take = this.gridData.length; // Show all rows
-            this.gridSettings.state.skip = 0; // Start from first page
-            this.grid.pageSize = this.gridData.length;
-            this.grid.skip = 0;
+// Load saved state from the selected preference
+public loadSavedState(preference: SavedPreference): void {
+  // preference is Users Selected Preference a obj that holds name,id,gridConfig
+    if (!preference || !this.isValidGridSettings(preference.gridConfig)) {
+      console.warn('Invalid or missing preference:', preference);
+      return;
+    }
+    try {
+      // Using the mapGridSettings () to map the saved state to the grid   
+      this.gridSettings = this.mapGridSettings(preference.gridConfig);
+      if (!this.grid) return;
+      const { state, columnsConfig } = this.gridSettings;
+      // Apply the saved state to the grid
+      this.grid.sort = state.sort || [];
+      this.grid.filter = state.filter || null;
+      this.gridSettings.state.take = this.gridData.length;// Show all rows
+      this.gridSettings.state.skip = 0;                    // Reset to first page
+      this.grid.pageSize = this.gridData.length;
+      this.grid.skip = 0;  
+      // Apply saved  column configurations
+      if (columnsConfig?.length) {
+        const columns = this.grid.columns.toArray();
+        columns.forEach(column => {
+          // Match the current column with its saved configuration by field name
+          const saved = columnsConfig.find(c => c.field === (column as any).field);
+          if (saved) {
+            column.width = saved.width;
+            column.hidden = saved.hidden;
+            (column as any).orderIndex = saved.orderIndex;
           }
-  
-          // Apply column configurations
-          if (settings.columnsConfig) {
-            const columns = this.grid.columns.toArray();
-            
-            // First apply column properties
-            columns.forEach(column => {
-              const savedColumn = settings.columnsConfig.find(c => c.field === (column as any).field);
-              if (savedColumn) {
-                column.width = savedColumn.width;
-                column.hidden = savedColumn.hidden;
-                (column as any).orderIndex = savedColumn.orderIndex;
-              }
-            });
-  
-            // Then handle column reordering
-            const orderedFields = settings.columnsConfig
-              .sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0))
-              .map(col => col.field);
-  
-            if (orderedFields.length > 0) {
-              orderedFields.forEach((field, index) => {
-                  const column = this.grid.columns.find(col => (col as any).field === field);
-                  if (column) {
-                      this.grid.reorderColumn(column, index);
-                  }
-              });
-            }
-          }
-  
-          // Refresh data and grid
-          this.gridData = process(this.gridData, settings.state).data;
-          this.grid.data = [...this.gridData];
-          // this.grid.refresh();
-  
-          console.log('Successfully loaded preference:', preference.name);
-        }
-      } catch (error) {
-        console.error('Error applying grid settings:', error);
+        });
+        // Optional: Reordering (uncomment if needed)
+        // columns.sort((a, b) => ((a as any).orderIndex || 0) - ((b as any).orderIndex || 0));
       }
-    } else {
-      console.warn('Invalid grid settings in preference:', preference);
+      // Reapply the grid data with the new state
+      this.gridData = process(this.gridData, state).data; //`.data` gives the processed visible rows
+      this.grid.data = [...this.gridData];
+    } catch (error) {
+      console.error('Error applying grid settings:', error);
     }
   }
- 
-  public savedStateExists: boolean = false;
-  
+    public savedStateExists: boolean = false;
+
+  // prepares grid blueprint from saved config returns a normalized configuration 
   public mapGridSettings(gridSettings: GridSettings): GridSettings {
     const state = gridSettings.state;
     // this.mapDateFilter(state.filter);
-
     return {
       state,
       columnsConfig: gridSettings.columnsConfig.sort(
@@ -357,6 +336,7 @@ public dataStateChange(state: State): void {
 
 //--------Delete Saved Prefrences------------------->
   deletePreference(item: any, event: Event): void {
+    // item is SavedPreference holds id,naem,gridConfig
     event.stopPropagation(); // Prevent dropdown from selecting the item
     const index = this.savedPreferences.indexOf(item);
     if (index > -1) {
@@ -503,6 +483,7 @@ public getCategoryName(categoryId: number): string {
 
 }
 
+//Reactive form group for the grid
 const createFormGroup = (dataItem: Partial<Product>) =>
   new FormGroup({
     id: new FormControl(dataItem.id),
