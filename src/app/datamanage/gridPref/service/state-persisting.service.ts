@@ -1,6 +1,6 @@
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
 import { GridSettings } from '../grid-settings.interface';
+import { isPlatformBrowser } from '@angular/common'; //with Angu Universal,Ang runs code on server first to render the initial HTML which throws errors when using localStorage directly.
 
 const getCircularReplacer = () => {
   const seen = new WeakSet();
@@ -18,7 +18,7 @@ const getCircularReplacer = () => {
 export interface SavedPreference {
   id: string;
   name: string;
-  gridConfig: GridSettings;
+  gridConfig: GridSettings; //GridSettings is an interface that defines state,gridData,colConfig.
   timestamp: Date;
 }
 
@@ -26,21 +26,21 @@ export interface SavedPreference {
   providedIn: 'root'
 })
 export class StatePersistingService {
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
-  
-  // The key used to store grid preferences in local storage
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+
+  }
+  //The key used to store grid preferences in local storage
   private readonly PREFERENCES_KEY = 'gridPreferences';
-  //Saving the grid state in local storage 
   public savePreference(name: string, gridConfig: GridSettings): void {
-    if (isPlatformBrowser(this.platformId)) {
+    if (isPlatformBrowser(this.platformId)) //returns true only in the browser, so code won't break during server-side rendering
+      { 
       const preferences = this.getAllPreferences();
       const newPreference: SavedPreference = {
-        id: crypto.randomUUID(),
+        id: crypto.randomUUID(), // Generate a uuid => 5 groups of hexadecimal digits
         name,
         gridConfig,
         timestamp: new Date()
       };
-      
       preferences.push(newPreference);
       localStorage.setItem(this.PREFERENCES_KEY, JSON.stringify(preferences, getCircularReplacer()));
     }
@@ -49,7 +49,7 @@ export class StatePersistingService {
   public getAllPreferences(): SavedPreference[] {
     if (isPlatformBrowser(this.platformId)) {
       const saved = localStorage.getItem(this.PREFERENCES_KEY);
-      return saved ? JSON.parse(saved) : [];
+      return saved ? JSON.parse(saved) : []; //If saved is truthy (i.e., not null):Parse the saved JSON else return an empty array.
     }
     return [];
   }
@@ -68,7 +68,7 @@ export class StatePersistingService {
   }
 
 
-  // --------------
+  // ---- Give the specific config to the grid ----
   public get<T>(token: string): T | null {
     if (isPlatformBrowser(this.platformId)) {
       const settings = localStorage.getItem(token);
@@ -77,19 +77,19 @@ export class StatePersistingService {
     return null;
   }
 
-  public set<T>(token: string, gridConfig: GridSettings): void {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem(
-        token,
-        JSON.stringify(gridConfig, getCircularReplacer())
-      );
-    }
-  }
+  // public set<T>(token: string, gridConfig: GridSettings): void {
+  //   if (isPlatformBrowser(this.platformId)) {
+  //     localStorage.setItem(
+  //       token,
+  //       JSON.stringify(gridConfig, getCircularReplacer())
+  //     );
+  //   }
+  // }
 
-  public hasState(token: string): boolean {
-    if (isPlatformBrowser(this.platformId)) {
-      return localStorage.getItem(token) !== null;
-    }
-    return false;
-  }
+  // public hasState(token: string): boolean {
+  //   if (isPlatformBrowser(this.platformId)) {
+  //     return localStorage.getItem(token) !== null;
+  //   }
+  //   return false;
+  // }
 }
