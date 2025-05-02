@@ -18,8 +18,6 @@ import { GridSettings } from './gridPref/grid-settings.interface';
 import { SavedPreference, StatePersistingService } from './gridPref/service/state-persisting.service';
 import { KENDO_DATEPICKER } from '@progress/kendo-angular-dateinputs';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-import { log } from 'node:console';
-import { identity } from 'rxjs';
 
 @Component({
   selector: 'app-datamanage',
@@ -58,10 +56,13 @@ export class DatamanageComponent implements OnInit {
  public selectedPreference: SavedPreference | null = null; 
 
 constructor(private service: DataservieService,public persistingService: StatePersistingService) {
-  const persistedSettings = this.persistingService.get("gridSettings") as GridSettings;
-  if (persistedSettings && 'state' in persistedSettings && 'columnsConfig' in persistedSettings) {
-    this.gridSettings = this.mapGridSettings(persistedSettings);
-  }
+  //This block is useful only if: "gridSettings" is meant to be the default or last-used configuration,
+  // You want to automatically apply a specific saved grid configuration (like a default or last-used setting) as soon as the component loads.
+  // const persistedSettings = this.persistingService.get("gridSettings") as GridSettings;
+  // if (persistedSettings && 'state' in persistedSettings && 'columnsConfig' in persistedSettings) {
+  //   //restore the grid layout from localStorage only one specific config 
+  //   this.gridSettings = this.mapGridSettings(persistedSettings);
+  // }
 }
 
 public ngOnInit(): void {
@@ -85,7 +86,6 @@ private loadPreferences(): void {
   public addHandler(args: AddEvent | { sender: any }): void {
     const sender = args.sender || this.grid;
     this.closeEditor(sender);
-
     this.formGroup = createFormGroup({
       ProductName: '',
       UnitPrice: "0",
@@ -140,7 +140,6 @@ private loadPreferences(): void {
       );
     }
   }
-
   // Edit handler for opening the editor
   // public editHandler({ sender, rowIndex, dataItem }: EditEvent): void {
   //   this.closeEditor(sender);
@@ -265,7 +264,6 @@ public saveGridSettings(grid: GridComponent): void {
     this.persistingService.savePreference(name, gridConfig);
     this.loadPreferences();
   }
-  
 // Load saved state from the selected preference
 public loadSavedState(preference: SavedPreference): void {
   // preference is Users Selected Preference a obj that holds name,id,gridConfig
@@ -307,9 +305,8 @@ public loadSavedState(preference: SavedPreference): void {
       console.error('Error applying grid settings:', error);
     }
   }
-    public savedStateExists: boolean = false;
-
-  // prepares grid blueprint from saved config returns a normalized configuration 
+    public savedStateExists: boolean = false; 
+// prepares grid blueprint from saved config returns a normalized configuration 
   public mapGridSettings(gridSettings: GridSettings): GridSettings {
     const state = gridSettings.state;
     // this.mapDateFilter(state.filter);
@@ -321,7 +318,6 @@ public loadSavedState(preference: SavedPreference): void {
       gridData: process(this.gridData, state),
     };
   }
-
   // private mapDateFilter = (descriptor: any) => {
   //   const filters = descriptor.filters || [];
 
@@ -334,7 +330,7 @@ public loadSavedState(preference: SavedPreference): void {
   //   });
   // };
 
-//--------Delete Saved Prefrences------------------->
+//--------Delete Saved Prefrences------------------>
   deletePreference(item: any, event: Event): void {
     // item is SavedPreference holds id,naem,gridConfig
     event.stopPropagation(); // Prevent dropdown from selecting the item
