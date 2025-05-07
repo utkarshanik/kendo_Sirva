@@ -231,7 +231,7 @@ private saveCurrentEdit(): void {
 // Save the current state of the grid when it changes...
 public dataStateChange(state: State): void {
     this.gridSettings.state = state;
-    // Update the grid data based on the new state
+    // Update the grid settings grid data based on the new state
     this.gridSettings.gridData = process(this.gridData, state);
   }
   private isValidGridSettings(settings: any): settings is GridSettings {
@@ -260,7 +260,8 @@ public saveGridSettings(grid: GridComponent): void {
         hidden: item.hidden,
       })) 
     };
-  
+    console.log(gridConfig);
+    
     this.persistingService.savePreference(name, gridConfig);
     this.loadPreferences();
   }

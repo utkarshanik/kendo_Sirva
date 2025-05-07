@@ -124,6 +124,11 @@ background-color: #e4e4e4;
   border-color: #333333 !important;
 }
 
+.dark-mode .k-grid-content 
+{
+  background-color: #000000;
+
+}
 .dark-mode .k-grid-header {
   background-color: #000000;
 }
